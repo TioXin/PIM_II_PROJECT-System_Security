@@ -1,0 +1,68 @@
+# 🛡️ Sistema de Segurança Computacional - PIM II (ADS)
+
+Este projeto é uma ferramenta de segurança multiplataforma (Windows e Linux) desenvolvida em Python para o **PIM II (Projeto Integrado Multidisciplinar)** do curso de Análise e Desenvolvimento de Sistemas. O software permite o controle de hardware (bloqueio de portas USB) e o gerenciamento de acesso a redes (bloqueio de domínios via DNS local).
+
+## 🚀 Funcionalidades
+
+- **Gerenciamento USB (Multi-OS):**
+    - **Windows:** Manipulação de chaves do Registro (`HKEY_LOCAL_MACHINE`) para desativar o serviço `USBSTOR`.
+    - **Linux (Pop!_OS/Ubuntu):** Gerenciamento de módulos do Kernel via `modprobe` e criação de arquivos de `blacklist` em `/etc/modprobe.d/`.
+- **Bloqueio de Domínios (DNS):**
+    - Edição automatizada do arquivo `hosts` do sistema.
+    - Utilização de **Marcadores de Sincronização** para garantir que apenas as entradas do programa sejam modificadas, evitando corrupção de dados do sistema.
+    - Limpeza automática de cache DNS (*Flush DNS*) após cada alteração.
+- **Segurança de Execução:**
+    - Verificação e solicitação automática de privilégios de Administrador/Root.
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Linguagem:** Python 3.x
+- **Bibliotecas Nativas:**
+    - `subprocess`: Para execução de comandos de sistema.
+    - `ctypes`: Para interação com a API do Windows (verificação de Admin).
+    - `winreg`: Para manipulação do Registro do Windows.
+    - `json`: Para persistência de configurações locais.
+    - `platform`: Para detecção dinâmica do Sistema Operacional.
+
+
+
+## 📋 Pré-requisitos
+
+- Python 3.10 ou superior instalado.
+- Privilégios de administrador na máquina para realizar as alterações de hardware e rede.
+
+## 🔧 Instalação e Uso
+
+1. Clone o repositório:
+   ```bash
+   git clone [https://github.com/seu-usuario/nome-do-repositorio.git](https://github.com/seu-usuario/nome-do-repositorio.git)
+
+## ⚠️⚠️⚠️ Criado para fins educacionais ⚠️⚠️⚠️
+
+Este projeto foi criado para uma atividade bimestral, assim sendo, o software desenvolvido não deve-se ser usado para fins comerciais, fins que violem direitos autorais e LGPD. Ao utilizar do sistema desenvolvido, entende-se que concorda com este termo, e também se responsabiliza pelo uso.
+
+## 🔍 Evidências Técnicas e Validação
+
+Durante o desenvolvimento, foram realizados testes de estresse para garantir que as alterações de baixo nível (Kernel e Registro) fossem aplicadas corretamente.
+
+1. **Módulos do Kernel (Linux):**
+   No terminal, utilize o comando `lsmod | grep usb_storage`.
+   - **Estado Liberado:** O comando retornará a linha do módulo ativo.
+   - **Estado Bloqueado:** O comando não retornará nada, confirmando que o driver foi removido e "blacklisted".
+
+2. **Registro do Sistema (Windows):**
+   Acesse o editor de registro (`regedit`) no caminho:  
+   `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR`
+   - **Valor 3:** USB Liberado (Start automático).
+   - **Valor 4:** USB Bloqueado (Serviço desativado via script).
+
+3. **Resolução de Nomes (Hosts & DNS):**
+   Acesse o arquivo de hosts do sistema para verificar a seção gerenciada pelo script:
+   - **Linux:** `sudo nano /etc/hosts`
+   - **Windows:** `C:\Windows\System32\drivers\etc\hosts`
+   Após o bloqueio, execute `ping [site-bloqueado]` no terminal. A resposta deve indicar o IP de loopback `127.0.0.1`, provando que a requisição não saiu para a rede externa.
+
+---
+
+## ✒️ Autor
+* **Arthur G.** - [Seu GitHub](https://github.com/TioXin)
