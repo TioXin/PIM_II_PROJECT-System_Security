@@ -1,68 +1,201 @@
-# 🛡️ Sistema de Segurança Computacional - PIM II (ADS)
+# 🛡️ Sistema de Segurança Computacional — PIM II (ADS)
 
-Este projeto é uma ferramenta de segurança multiplataforma (Windows e Linux) desenvolvida em Python para o **PIM II (Projeto Integrado Multidisciplinar)** do curso de Análise e Desenvolvimento de Sistemas. O software permite o controle de hardware (bloqueio de portas USB) e o gerenciamento de acesso a redes (bloqueio de domínios via DNS local).
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-green)
+![License](https://img.shields.io/badge/Status-Educacional-orange)
 
-## 🚀 Funcionalidades
+Sistema de segurança computacional multiplataforma (**Windows e Linux**) desenvolvido em Python para o **PIM II (Projeto Integrado Multidisciplinar)** do curso de **Análise e Desenvolvimento de Sistemas (ADS)**.
 
-- **Gerenciamento USB (Multi-OS):**
-    - **Windows:** Manipulação de chaves do Registro (`HKEY_LOCAL_MACHINE`) para desativar o serviço `USBSTOR`.
-    - **Linux (Pop!_OS/Ubuntu):** Gerenciamento de módulos do Kernel via `modprobe` e criação de arquivos de `blacklist` em `/etc/modprobe.d/`.
-- **Bloqueio de Domínios (DNS):**
-    - Edição automatizada do arquivo `hosts` do sistema.
-    - Utilização de **Marcadores de Sincronização** para garantir que apenas as entradas do programa sejam modificadas, evitando corrupção de dados do sistema.
-    - Limpeza automática de cache DNS (*Flush DNS*) após cada alteração.
-- **Segurança de Execução:**
-    - Verificação e solicitação automática de privilégios de Administrador/Root.
-
-## 🛠️ Tecnologias Utilizadas
-
-- **Linguagem:** Python 3.x
-- **Bibliotecas Nativas:**
-    - `subprocess`: Para execução de comandos de sistema.
-    - `ctypes`: Para interação com a API do Windows (verificação de Admin).
-    - `winreg`: Para manipulação do Registro do Windows.
-    - `json`: Para persistência de configurações locais.
-    - `platform`: Para detecção dinâmica do Sistema Operacional.
-
-
-
-## 📋 Pré-requisitos
-
-- Python 3.10 ou superior instalado.
-- Privilégios de administrador na máquina para realizar as alterações de hardware e rede.
-
-## 🔧 Instalação e Uso
-
-1. Clone o repositório:
-   ```bash
-   git clone [https://github.com/TioXin/PIM_II_PROJECT-System_Security]
-
-## ⚠️⚠️⚠️ Criado para fins educacionais ⚠️⚠️⚠️
-
-Este projeto foi criado para uma atividade bimestral, assim sendo, o software desenvolvido não deve-se ser usado para fins comerciais, fins que violem direitos autorais e LGPD. Ao utilizar do sistema desenvolvido, entende-se que concorda com este termo, e também se responsabiliza pelo uso.
-
-## 🔍 Evidências Técnicas e Validação
-
-Durante o desenvolvimento, foram realizados testes de estresse para garantir que as alterações de baixo nível (Kernel e Registro) fossem aplicadas corretamente.
-
-1. **Módulos do Kernel (Linux):**
-   No terminal, utilize o comando `lsmod | grep usb_storage`.
-   - **Estado Liberado:** O comando retornará a linha do módulo ativo.
-   - **Estado Bloqueado:** O comando não retornará nada, confirmando que o driver foi removido e "blacklisted".
-
-2. **Registro do Sistema (Windows):**
-   Acesse o editor de registro (`regedit`) no caminho:  
-   `HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR`
-   - **Valor 3:** USB Liberado (Start automático).
-   - **Valor 4:** USB Bloqueado (Serviço desativado via script).
-
-3. **Resolução de Nomes (Hosts & DNS):**
-   Acesse o arquivo de hosts do sistema para verificar a seção gerenciada pelo script:
-   - **Linux:** `sudo nano /etc/hosts`
-   - **Windows:** `C:\Windows\System32\drivers\etc\hosts`
-   Após o bloqueio, execute `ping [site-bloqueado]` no terminal. A resposta deve indicar o IP de loopback `127.0.0.1`, provando que a requisição não saiu para a rede externa.
+O software permite o **controle de hardware**, através do bloqueio de portas USB, e o **gerenciamento de acesso à rede**, utilizando bloqueio de domínios por meio do DNS local.
 
 ---
 
-## ✒️ Autor
-* **Arthur G.** - [Seu GitHub](https://github.com/TioXin)
+# 📌 Funcionalidades
+
+## 🔒 Gerenciamento USB (Multi-OS)
+
+### Windows
+- Manipulação de chaves do Registro do Windows (`HKEY_LOCAL_MACHINE`);
+- Desativação do serviço `USBSTOR` para impedir acesso a dispositivos USB de armazenamento.
+
+### Linux (Ubuntu / Pop!_OS)
+- Gerenciamento de módulos do Kernel via `modprobe`;
+- Criação automática de arquivos de *blacklist* em `/etc/modprobe.d/`;
+- Remoção do módulo `usb_storage` em tempo de execução.
+
+---
+
+## 🌐 Bloqueio de Domínios (DNS)
+
+- Edição automatizada do arquivo `hosts` do sistema;
+- Utilização de **marcadores de sincronização**, garantindo que apenas entradas geradas pelo programa sejam modificadas;
+- Prevenção de corrupção do arquivo original do sistema;
+- Limpeza automática do cache DNS (*Flush DNS*) após alterações.
+
+---
+
+## 🔐 Segurança de Execução
+
+- Verificação automática de privilégios administrativos;
+- Solicitação de permissões **Administrador (Windows)** ou **Root (Linux)** quando necessário.
+
+---
+
+# 🛠️ Tecnologias Utilizadas
+
+## Linguagem
+- **Python 3.x**
+
+## Bibliotecas Nativas
+
+| Biblioteca | Finalidade |
+|------------|-------------|
+| `subprocess` | Execução de comandos do sistema |
+| `ctypes` | Interação com API do Windows e verificação de privilégios |
+| `winreg` | Manipulação do Registro do Windows |
+| `json` | Persistência de configurações locais |
+| `platform` | Detecção dinâmica do sistema operacional |
+
+---
+
+# 📋 Pré-requisitos
+
+Antes de executar o projeto, certifique-se de possuir:
+
+- **Python 3.10+** instalado;
+- Permissões de **Administrador/Root** para alterações de hardware e rede;
+- Sistema operacional compatível:
+  - Windows
+  - Linux (Ubuntu / Pop!_OS)
+
+---
+
+# 🚀 Instalação
+
+## 1. Clone o repositório
+
+```bash
+git clone https://github.com/TioXin/PIM_II_PROJECT-System_Security.git
+```
+
+## 2. Acesse o diretório do projeto
+
+```bash
+cd PIM_II_PROJECT-System_Security
+```
+
+## 3. Execute o sistema
+
+```bash
+python main.py
+```
+
+---
+
+# 🔍 Evidências Técnicas e Validação
+
+Durante o desenvolvimento, foram realizados testes técnicos para validar a aplicação correta das alterações em **Kernel, Registro do Windows e resolução DNS**.
+
+## 1. Módulos do Kernel (Linux)
+
+Verifique se o módulo `usb_storage` está ativo:
+
+```bash
+lsmod | grep usb_storage
+```
+
+### Resultado esperado
+
+**USB liberado**
+- O comando retornará a linha do módulo carregado.
+
+**USB bloqueado**
+- O comando não retornará saída, indicando que o driver foi removido e adicionado à blacklist.
+
+---
+
+## 2. Registro do Sistema (Windows)
+
+Abra o Editor de Registro (`regedit`) e acesse:
+
+```text
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\USBSTOR
+```
+
+### Valores esperados
+
+| Valor | Estado |
+|--------|--------|
+| `3` | USB liberado |
+| `4` | USB bloqueado |
+
+O valor é alterado automaticamente pelo sistema via script.
+
+---
+
+## 3. Resolução de Nomes (Hosts & DNS)
+
+Verifique o arquivo `hosts` do sistema:
+
+### Linux
+
+```bash
+sudo nano /etc/hosts
+```
+
+### Windows
+
+```text
+C:\Windows\System32\drivers\etc\hosts
+```
+
+Após bloquear um domínio, execute:
+
+```bash
+ping site-bloqueado.com
+```
+
+### Resultado esperado
+
+A resolução deverá retornar:
+
+```text
+127.0.0.1
+```
+
+Isso confirma que a requisição foi redirecionada localmente e não alcançou a rede externa.
+
+---
+
+# ⚠️ Aviso Legal
+
+> **Projeto desenvolvido exclusivamente para fins educacionais.**
+
+Este software foi criado como parte de uma atividade acadêmica (**PIM II**).
+
+O uso do sistema para fins comerciais, atividades ilícitas ou qualquer ação que viole legislação vigente — incluindo privacidade, segurança da informação e LGPD — é de total responsabilidade do usuário.
+
+Ao utilizar este software, entende-se que o usuário concorda com estes termos e assume integral responsabilidade pelo seu uso.
+
+---
+
+# 📁 Estrutura do Projeto
+
+```text
+PIM_II_PROJECT-System_Security/
+│── main.py
+│── config.json
+│── modules/
+│   ├── usb_manager.py
+│   ├── dns_manager.py
+│── README.md
+```
+
+> *A estrutura acima pode variar conforme a organização atual do projeto.*
+
+---
+
+# ✒️ Autor
+
+**Arthur G.**  
+GitHub: https://github.com/TioXin
